@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scenes - Game Design Project</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="index.html">Game Design Project</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="game.html">Game Design</a></li>
+        <li class="nav-item"><a class="nav-link" href="scenes.html">Scenes</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container mt-4">
+    <h1>Interactive Scenes</h1>
+    <ul class="nav nav-tabs" id="sceneTabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="scene1-tab" data-toggle="tab" href="#scene1" role="tab" aria-controls="scene1" aria-selected="true">Scene 1</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="scene2-tab" data-toggle="tab" href="#scene2" role="tab" aria-controls="scene2" aria-selected="false">Scene 2</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="scene3-tab" data-toggle="tab" href="#scene3" role="tab" aria-controls="scene3" aria-selected="false">Scene 3</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="scene4-tab" data-toggle="tab" href="#scene4" role="tab" aria-controls="scene4" aria-selected="false">Scene 4</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="scene5-tab" data-toggle="tab" href="#scene5" role="tab" aria-controls="scene5" aria-selected="false">Scene 5</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="sceneTabsContent">
+      <div class="tab-pane fade show active" id="scene1" role="tabpanel" aria-labelledby="scene1-tab">
+        <div class="scene-content" id="scene-content-1">Content for Scene 1</div>
+      </div>
+      <div class="tab-pane fade" id="scene2" role="tabpanel" aria-labelledby="scene2-tab">
+        <div class="scene-content" id="scene-content-2">Content for Scene 2</div>
+      </div>
+      <div class="tab-pane fade" id="scene3" role="tabpanel" aria-labelledby="scene3-tab">
+        <div class="scene-content" id="scene-content-3">Content for Scene 3</div>
+      </div>
+      <div class="tab-pane fade" id="scene4" role="tabpanel" aria-labelledby="scene4-tab">
+        <div class="scene-content" id="scene-content-4">Content for Scene 4</div>
+      </div>
+      <div class="tab-pane fade" id="scene5" role="tabpanel" aria-labelledby="scene5-tab">
+        <div class="scene-content" id="scene-content-5">Content for Scene 5</div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    document.getElementById('scene-content-1').innerHTML = '<p>Interactive content for scene 1.</p>';
+    document.getElementById('scene-content-2').innerHTML = '<p>Interactive content for scene 2.</p>';
+    document.getElementById('scene-content-3').innerHTML = '<p>Interactive content for scene 3.</p>';
+    document.getElementById('scene-content-4').innerHTML = '<p>Interactive content for scene 4.</p>';
+    document.getElementById('scene-content-5').innerHTML = '<p>Interactive content for scene 5.</p>';
+  </script>
+</body>
+</html>
