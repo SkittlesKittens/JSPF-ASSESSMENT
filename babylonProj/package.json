@@ -8,10 +8,22 @@
     "build": "tsc && vite build",
     "preview": "vite preview --host",
     "Element01build": "tsc && vite build Element01",
-    "Element01preview": "tsc && vite preview Element01 --host"
+    "Element01preview": "tsc && vite preview Element01 --host",
+    "Element02build": "tsc && vite build Element02",
+    "Element02preview": "tsc && vite preview Element02 --host",
+    "Element03build": "tsc && vite build Element03",
+    "Element03preview": "tsc && vite preview Element03 --host",
+    "Element04build": "tsc && vite build Element04",
+    "Element04preview": "tsc && vite preview Element04 --host",
+    "Element05build": "tsc && vite build Element05",
+    "Element05preview": "tsc && vite preview Element05 --host"
   },
   "devDependencies": {
-    "typescript": "^5.2.2",
-    "vite": "^5.3.1"
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^7.14.0",
+    "@babylonjs/loaders": "^7.14.0"
   }
 }
