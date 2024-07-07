@@ -22,37 +22,113 @@ import {
     PointLight,
     DirectionalLight,
     CubeTexture,
-    MeshLODLevel,
+    SceneLoader,
+    ActionManager,
+    ExecuteCodeAction,
+    AnimationPropertiesOverride,
   } from "@babylonjs/core";
   //----------------------------------------------------
   
   //----------------------------------------------------
   //MIDDLE OF CODE - FUNCTIONS
+
+  let keyDownMap: any[] = [];
+
+
+  function importPlayerMesh(scene, x: number, y: number) {
+    let tempItem ={flag: false}
+    let item = SceneLoader.ImportMesh("", "./models/", "dummy3.babylon", scene, function(newMeshes, particleSystems, skeletons) {
+    let mesh = newMeshes[0];
+    let skeleton = skeletons[0];
+    skeleton.animationPropertiesOverride = new AnimationPropertiesOverride();
+    skeleton.animationPropertiesOverride.enableBlending = true;
+    skeleton.animationPropertiesOverride.blendingSpeed = 0.05;
+    skeleton.animationPropertiesOverride.loopMode = 1;
+
+    let walkRange: any = skeleton.getAnimationRange("YBot_Walk");
+
+    let animating: boolean = false;
+
+    scene.onBeforeRenderObservable.add(()=> {
+      let keydown: boolean = false;
+      if (keyDownMap["w"] || keyDownMap["ArrowUp"]) {
+        mesh.position.z += 0.1;
+        mesh.rotation.y = 0;
+        keydown = true;
+      }
+      if (keyDownMap["a"] || keyDownMap["ArrowLeft"]) {
+        mesh.position.x -= 0.1;
+        mesh.rotation.y = 3 * Math.PI / 2;
+        keydown = true;
+      }
+      if (keyDownMap["s"] || keyDownMap["ArrowDown"]) {
+        mesh.position.z -= 0.1;
+        mesh.rotation.y = 2 * Math.PI / 2;
+        keydown = true;
+      }
+      if (keyDownMap["d"] || keyDownMap["ArrowRight"]) {
+        mesh.position.x += 0.1;
+        mesh.rotation.y = Math.PI / 2;
+        keydown = true;
+      }
+
+      if (keydown) {
+        if (!animating) {
+          animating = true;
+          scene.beginAnimation(skeleton, walkRange.from, walkRange.to, true);
+        }
+        } else {
+          animating = false;
+          scene.stopAnimation(skeleton);
+        }
+      });
+    });
+    return item;
+    }
+
+    function actionManager(scene: Scene){
+      scene.actionManager = new ActionManager(scene);
   
-  //Create Terrain
-  function createTerrain(scene: Scene) {
-    //Create large ground for valley environment
-   const largeGroundMat = new StandardMaterial("largeGroundMat");
-   largeGroundMat.diffuseTexture = new Texture("https://assets.babylonjs.com/environments/valleygrass.png");
-   
-   const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "https://assets.babylonjs.com/environments/villageheightmap.png", {width:150, height:150, subdivisions: 20, minHeight:0, maxHeight: 10});
-   largeGround.material = largeGroundMat;
-    return largeGround;
-  }
+      scene.actionManager.registerAction(
+        new ExecuteCodeAction(
+          {
+            trigger: ActionManager.OnKeyDownTrigger,
+            //parameters: 'w'
+          },
+          function(evt) {keyDownMap[evt.sourceEvent.key] = true; }
+        )
+      );
+      scene.actionManager.registerAction(
+        new ExecuteCodeAction(
+          {
+            trigger: ActionManager.OnKeyUpTrigger
+          },
+          function(evt) {keyDownMap[evt.sourceEvent.key] = false; }
+        )
+      );
+      return scene.actionManager;
+    } 
 
   //adding detail to the ground
   function createGround(scene: Scene) {
-     //Create Village ground
-     const groundMat = new StandardMaterial("groundMat");
-     groundMat.diffuseTexture = new Texture("https://assets.babylonjs.com/environments/villagegreen.png");
-     groundMat.diffuseTexture.hasAlpha = true;
- 
-     const ground = MeshBuilder.CreateGround("ground", {width:24, height:24});
-     ground.material = groundMat;
-     ground.position.y = 0.02;
-     return ground;
+    const ground = MeshBuilder.CreateGround("ground", {height: 10, width: 10, subdivisions: 4});
+    return ground;
+ }
+  //Create Skybox
+  function createSkybox(scene: Scene) {
+    //Skybox
+    const skybox = MeshBuilder.CreateBox("skyBox", {size:150}, scene);
+	  const skyboxMaterial = new StandardMaterial("skyBox", scene);
+	  skyboxMaterial.backFaceCulling = false;
+	  skyboxMaterial.reflectionTexture = new CubeTexture("textures/skybox", scene);
+	  skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
+	  skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
+	  skyboxMaterial.specularColor = new Color3(0, 0, 0);
+	  skybox.material = skyboxMaterial;
+    return skybox;
   }
- 
+
+
 
   function createAnyLight(scene: Scene, index: number, px: number, py: number, pz: number, colX: number, colY: number, colZ: number, mesh: Mesh) {
     // only spotlight, point and directional can cast shadows in BabylonJS
@@ -118,9 +194,10 @@ import {
   export default function createStartScene(engine: Engine) {
     interface SceneData {
       scene: Scene;
-      terrain?: Mesh;
       ground?: Mesh;
-      box?: Mesh;
+      importMesh?: any;
+      actionManager?: any;
+      skybox?: Mesh;
       light?: Light;
       hemisphericLight?: HemisphericLight;
       camera?: Camera;
@@ -130,8 +207,13 @@ import {
     that.scene.debugLayer.show();
   
     //further code here
-    that.terrain = createTerrain(that.scene);
+    that.importMesh = importPlayerMesh(that.scene, 0, 0);
+    that.actionManager = actionManager(that.scene);
+
+
+    //-------------------------------------
     that.ground = createGround(that.scene);
+    that.skybox = createSkybox(that.scene);
 
     //Scene Lighting main camera
     that.hemisphericLight = createHemiLight(that.scene);

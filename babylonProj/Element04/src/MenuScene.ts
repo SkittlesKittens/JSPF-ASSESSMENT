@@ -23,45 +23,16 @@ import {
     PointLight,
     DirectionalLight,
     CubeTexture,
-    Sprite,
-    SpriteManager,
     SceneLoader,
     ActionManager,
     ExecuteCodeAction,
     AnimationPropertiesOverride,
-    Sound
+    Sound,
   } from "@babylonjs/core";
   import * as GUI from "@babylonjs/gui";
-  import HavokPhysics from "@babylonjs/havok";
-  import { HavokPlugin, PhysicsAggregate, PhysicsShapeType } from "@babylonjs/core";
+  import HavokPhysics from "@babylonjs/havok"
+  import { HavokPlugin, PhysicsAggregate, PhysicsShapeType } from "@babylonjs/core";  
   //----------------------------------------------------
-
-  function createText(scene: Scene, theText: string, x: string, y: string, s: string, c: string, advtex) {
-    let text = new GUI.TextBlock();
-    text.text = theText;
-    text.color = c;
-    text.fontSize = s;
-    text.fontWeight = "bold"; //can add parameter for this if you wish
-    text.left = x;
-    text.top = y;
-    advtex.addControl(text);
-    return text;
-  }
-
-  function createRectangle(scene: Scene, w: string, h: string, x: string, y: string, cr: number, c: string, t: number, bg: string, advtext) {
-    let rectangle = new GUI.Rectangle();
-    rectangle.width = w;
-    rectangle.height = h;
-    rectangle.left = x;
-    rectangle.top = y;
-    rectangle.cornerRadius = cr;
-    rectangle.color = c;
-    rectangle.thickness = t;
-    rectangle.background = bg;
-    advtext.addControl(rectangle);
-    return rectangle;
-  }
-
   function createSceneButton(scene: Scene, name: string, index: string, x: string, y: string, advtex) {
     let button = GUI.Button.CreateSimpleButton(name, index);
         button.left = x;
@@ -70,23 +41,26 @@ import {
         button.height = "60px";
         button.color = "white";
         button.cornerRadius = 20;
-        button.background = "purple";
-
+        button.background = "green";
         const buttonClick = new Sound("MenuClickSFX", "./audio/menu-click.wav", scene, null, {
           loop: false,
           autoplay: false,
         });
-
         button.onPointerUpObservable.add(function() {
-            console.log("THE BUTTON HAS BEEN CLICKED");
-            buttonClick.play();
-            setSceneIndex(1);
+          console.log("THE BUTTON HAS BEEN CLICKED");
+          buttonClick.play();
         });
-        advtex.addControl(button);
-        return button;
- }
+       advtex.addControl(button);
+       return button;
+  }
+  //----------------------------------------------------
+  //MIDDLE OF CODE - FUNCTIONS
 
-  //----------------------------------------------------------------------------------------------
+  let keyDownMap: any[] = [];
+
+
+
+
   //Create Skybox
   function createSkybox(scene: Scene) {
     //Skybox
@@ -100,6 +74,8 @@ import {
 	  skybox.material = skyboxMaterial;
     return skybox;
   }
+
+
 
   function createAnyLight(scene: Scene, index: number, px: number, py: number, pz: number, colX: number, colY: number, colZ: number, mesh: Mesh) {
     // only spotlight, point and directional can cast shadows in BabylonJS
@@ -130,7 +106,7 @@ import {
  
   function createHemiLight(scene: Scene) {
     const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-    light.intensity = 0.8;
+    light.intensity = 1;
     return light;
   }
   
@@ -165,16 +141,16 @@ import {
   
     let that: SceneData = { scene: new Scene(engine) };
     that.scene.debugLayer.show();
-    //----------------------------------------------------------
 
     let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI", true);
-    let textBG = createRectangle(that.scene, "300px", "100px", "0px", "-200px", 20, "white", 4, "purple", advancedTexture);
-    let titleText = createText(that.scene, "THE GAME", "0px", "-200px", "45", "white", advancedTexture);
     let button1 = createSceneButton(that.scene, "but1", "Start Game", "0px", "-75px", advancedTexture);
-    let button2 = createSceneButton(that.scene, "but2", "Options", "0px", "0px", advancedTexture);
+    //further code here
 
+
+    //-------------------------------------
     that.skybox = createSkybox(that.scene);
-    //Scene Lighting & Camera
+
+    //Scene Lighting main camera
     that.hemisphericLight = createHemiLight(that.scene);
     that.camera = createArcRotateCamera(that.scene);
     return that;

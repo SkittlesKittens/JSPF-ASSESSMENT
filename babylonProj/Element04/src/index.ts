@@ -1,6 +1,6 @@
 import { Engine } from "@babylonjs/core";
-import MenuScene from "./MenuScene.ts";
-import GameScene from "./GameScene.ts";
+import MenuScene from "./MenuScene";
+import GameScene from "./GameScene";
 import './main.css';
 
 const CanvasName = "renderCanvas";
@@ -16,14 +16,14 @@ let scenes: any[] = [];
 
 let eng = new Engine(canvas, true, {}, true);
 
-scenes[0] = MenuScene(eng);
-scenes[1] = GameScene(eng);
+scenes [0] = MenuScene(eng);
+scenes [1] = GameScene(eng);
 
 scene = scenes[0].scene;
 setSceneIndex(0);
 
 export default function setSceneIndex(i: number) {
-    eng.runRenderLoop(() => {
-        scenes[i].scene.render();
-    });
-}                 
+ eng.runRenderLoop(() => {
+    scenes[i].scene.render();
+ });                  
+}

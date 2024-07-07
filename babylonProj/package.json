@@ -19,6 +19,7 @@
     "Element05preview": "tsc && vite preview Element05 --host"
   },
   "devDependencies": {
+    "@babylonjs/gui": "^7.14.0",
     "typescript": "^5.5.3",
     "vite": "^5.3.3"
   },
