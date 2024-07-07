@@ -22,7 +22,6 @@ import {
     PointLight,
     DirectionalLight,
     CubeTexture,
-    MeshLODLevel,
   } from "@babylonjs/core";
   //----------------------------------------------------
   
@@ -44,10 +43,10 @@ import {
   function createGround(scene: Scene) {
      //Create Village ground
      const groundMat = new StandardMaterial("groundMat");
-     groundMat.diffuseTexture = new Texture("https://assets.babylonjs.com/environments/villagegreen.png");
+     groundMat.diffuseTexture = new Texture("https://www.babylonjs-playground.com/textures/sand.jpg");
      groundMat.diffuseTexture.hasAlpha = true;
  
-     const ground = MeshBuilder.CreateGround("ground", {width:24, height:24});
+     const ground = MeshBuilder.CreateGround("ground", {width:30, height:30});
      ground.material = groundMat;
      ground.position.y = 0.02;
      return ground;
@@ -65,6 +64,43 @@ import {
 	  skybox.material = skyboxMaterial;
     return skybox;
   }
+
+  function createMaze(scene: Scene): Mesh[] {
+    const wallMat = new StandardMaterial("wallMat", scene);
+    wallMat.diffuseTexture = new Texture("textures/walltexture.jpg", scene);
+  
+    const wallData = [
+      // Outer walls
+      { position: new Vector3(0, 1, 15), scaling: new Vector3(30, 2, 1) },
+      { position: new Vector3(0, 1, -15), scaling: new Vector3(30, 2, 1) }, 
+      { position: new Vector3(-15, 1, 0), scaling: new Vector3(1, 2, 30) }, 
+      { position: new Vector3(15, 1, 0), scaling: new Vector3(1, 2, 30) }, 
+  
+      // Inner walls
+      { position: new Vector3(-10, 1, 10), scaling: new Vector3(10, 2, 1) }, 
+      { position: new Vector3(5, 1, 10), scaling: new Vector3(10, 2, 1) }, 
+      { position: new Vector3(-5, 1, 5), scaling: new Vector3(20, 2, 1) }, 
+      { position: new Vector3(10, 1, 0), scaling: new Vector3(10, 2, 1) }, 
+      { position: new Vector3(5, 1, -5), scaling: new Vector3(10, 2, 1) }, 
+      { position: new Vector3(-5, 1, -10), scaling: new Vector3(20, 2, 1) },  
+      { position: new Vector3(10, 1, 7.5), scaling: new Vector3(1, 2, 5) }, 
+      { position: new Vector3(-15, 1, 0), scaling: new Vector3(1, 2, 10) }, 
+      { position: new Vector3(15, 1, 0), scaling: new Vector3(1, 2, 10) }, 
+      { position: new Vector3(-10, 1, -7.5), scaling: new Vector3(1, 2, 5) }, 
+      { position: new Vector3(10, 1, -7.5), scaling: new Vector3(1, 2, 5) }, 
+      { position: new Vector3(0, 1, 2.5), scaling: new Vector3(1, 2, 5) },
+  ];
+  
+    const walls: Mesh[] = wallData.map(data => {
+      const wall = MeshBuilder.CreateBox("wall", { height: data.scaling.y, width: data.scaling.x, depth: data.scaling.z }, scene);
+      wall.position = data.position;
+      wall.material = wallMat;
+      return wall;
+    });
+  
+    return walls;
+  }
+
 
   function createAnyLight(scene: Scene, index: number, px: number, py: number, pz: number, colX: number, colY: number, colZ: number, mesh: Mesh) {
     // only spotlight, point and directional can cast shadows in BabylonJS
@@ -134,6 +170,7 @@ import {
       ground?: Mesh;
       skybox?: Mesh;
       box?: Mesh;
+      maze?: Mesh[];
       light?: Light;
       hemisphericLight?: HemisphericLight;
       camera?: Camera;
@@ -146,6 +183,7 @@ import {
     that.terrain = createTerrain(that.scene);
     that.ground = createGround(that.scene);
     that.skybox = createSkybox(that.scene);
+    that.maze = createMaze(that.scene);
 
     //Scene Lighting main camera
     that.hemisphericLight = createHemiLight(that.scene);

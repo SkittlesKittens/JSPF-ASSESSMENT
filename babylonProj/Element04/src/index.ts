@@ -1,22 +1,29 @@
 import { Engine } from "@babylonjs/core";
-import createStartScene from "./createStartScene";
+import MenuScene from "./MenuScene.ts";
+import GameScene from "./GameScene.ts";
 import './main.css';
 
 const CanvasName = "renderCanvas";
 
-// Create the canvas element and add it to the DOM
 let canvas = document.createElement("canvas");
 canvas.id = CanvasName;
+
 canvas.classList.add("background-canvas");
 document.body.appendChild(canvas);
 
-// Initialize the Babylon.js engine
-let engine = new Engine(canvas, true, {}, true);
+let scene;
+let scenes: any[] = [];
 
-// Create the scene using the imported function
-let startScene = createStartScene(engine);
+let eng = new Engine(canvas, true, {}, true);
 
-// Start the render loop
-engine.runRenderLoop(() => {
-    startScene.scene.render();
-});
+scenes[0] = MenuScene(eng);
+scenes[1] = GameScene(eng);
+
+scene = scenes[0].scene;
+setSceneIndex(0);
+
+export default function setSceneIndex(i: number) {
+    eng.runRenderLoop(() => {
+        scenes[i].scene.render();
+    });
+}                 
