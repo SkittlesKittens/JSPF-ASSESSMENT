@@ -29,9 +29,6 @@ import {
     AnimationPropertiesOverride,
     Sound,
   } from "@babylonjs/core";
-  import * as GUI from "@babylonjs/gui";
-  import HavokPhysics from "@babylonjs/havok"
-  import { HavokPlugin, PhysicsAggregate, PhysicsShapeType } from "@babylonjs/core";  
   //----------------------------------------------------
  
   //----------------------------------------------------
