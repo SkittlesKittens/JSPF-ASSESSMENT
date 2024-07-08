@@ -49,6 +49,7 @@ import {
         button.onPointerUpObservable.add(function() {
           console.log("THE BUTTON HAS BEEN CLICKED");
           buttonClick.play();
+          setSceneIndex(1);
         });
        advtex.addControl(button);
        return button;
